@@ -12,6 +12,12 @@ const fs = require('fs');
 function readFile() {
     const wordCount = {};
     let top50 = [];
+    const excludedWords = new Set([
+        'the', 'of', 'to', 'and', 'a', 'in', 'is', 'it', 'you', 'that', 'he', 'was', 'for', 'on', 'are', 'with', 'as',
+        'I', 'his', 'they', 'be', 'at', 'one', 'have', 'this', 'from', 'or', 'had', 'by', 'not', 'word', 'but', 'what',
+        'some', 'we', 'can', 'out', 'other', 'were', 'all', 'there', 'when', 'up', 'use', 'your', 'how', 'said', 'an',
+        'each', 'she'
+    ]);
     // Create a readable stream
     const readableStream = fs.createReadStream('./data/2701-0.txt', { encoding: 'utf8' });
 
@@ -26,7 +32,7 @@ function readFile() {
         // Split text into words and count
         words.forEach(word => {
             const sanitizedWord = word.toLowerCase().replace(/[.,!?]/g, ''); // Remove punctuation and convert to lowercase
-            if (sanitizedWord !== '') {
+            if (sanitizedWord !== '' && !excludedWords.has(sanitizedWord)) {
                 wordCount[sanitizedWord] = (wordCount[sanitizedWord] || 0) + 1;
             }
         });
